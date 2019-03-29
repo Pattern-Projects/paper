@@ -5,3 +5,7 @@ body{
 #sprites{
     display: none;
 }
+
+canvas{
+    border: 1px solid black;
+}

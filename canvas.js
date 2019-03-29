@@ -7,7 +7,6 @@ var sprites = document.getElementById("sprites");
 var frames = sprites.getElementsByTagName("img");
 var objects = [];
 
-
 // test objects
 for (var i = 0; i < frames.length; i++) {
     var x = Math.random() * 600;
@@ -17,6 +16,32 @@ for (var i = 0; i < frames.length; i++) {
 objects.push([150, 170, "Text"]);
 render(objects);
 
+
+function clipStart(){
+    // Initiate Clip
+    
+    // Run Clip
+    clip()
+}
+
+function levelStart(){
+    // Inititate Level
+    
+    // Run Level
+    level()
+}
+
+function clip(){
+    // Stays on clip until a change happens
+    if (true){clip}
+    else{levelStart}
+}
+
+function level(){
+    // Stays on level until a change happens
+    if (true){level}
+    else{clipStart}
+}
 
 
 function render(objects) {
@@ -29,3 +54,5 @@ function render(objects) {
         }
     })
 }
+
+clipStart();
