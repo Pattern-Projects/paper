@@ -63,18 +63,25 @@ function action() {     //Runs the scene
     // beat++;
     
     sprite++;
-    if (sprite > thisBeat.spriteLength)
+    if (sprite >= thisBeat.spriteLength)
     {
         sprite = 0;
     }
+    
+    //Sprite index
+    var si = parseInt(sprite/(thisBeat.spriteLength/3));
+    
+    // Testing
     var item = [""+sprite, 100, 100];
     renders = [item];
     render(renders);
 
-    
+    if (sprite < thisBeat.spriteLength)
+    {
     // Stays on clip until a change happens
     if (true) { setTimeout(function(){action()}, 1000/fps) }
     else { nextScene }
+}
 }
 
 function render(renders) {    //Renderer
