@@ -77,7 +77,6 @@ async function action() { //Runs the scene
     //Sprite index
     objects.forEach(function(object) {
         var si = parseInt(sprite / (thisBeat.spriteLength / object.sprites.length), 16);
-        console.log(object.sprites)
         if(object.sprites[si].src != "")
         {
         var item = [];
@@ -89,6 +88,7 @@ async function action() { //Runs the scene
         }
         else{
             beat++;
+            sprite = 0;
         }
     });
     render(renders);
@@ -105,7 +105,8 @@ async function action() { //Runs the scene
         if (!fire){
         fire = true;
         // Key Press Detected
-        beat++
+        beat++;
+        sprite = 0;
         }
     }
     
