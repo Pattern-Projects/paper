@@ -31,7 +31,7 @@ function load() {       //Loads in items from HTML
                 object.y = parseInt(objects[i].getAttribute("y"), 16);
                 object.name = objects[i].getAttribute("name");
                 
-                var sprites = objects[i].getElementsByTagName("sprite");
+                var sprites = objects[i].getElementsByTagName("img");
                 object.sprites = sprites;
                 objectsArray.push(object);
             }
@@ -67,23 +67,18 @@ function action() {     //Runs the scene
     {
         sprite = 0;
     }
-    var whell = document.getElementsByTagName("img");
     //Sprite index
-    var si = parseInt(sprite/(thisBeat.spriteLength/3), 16);
     objects.forEach(function(object){
+    var si = parseInt(sprite/(thisBeat.spriteLength/object.sprites.length), 16);
          var item = [];
          item.push(object.sprites[si]);
-        //  item.push(whell[0]);
          item.push(object.x);
          item.push(object.y);
+         item.push(object.name);
          renders.push(item);
     });
     
-    
-    // Testing
-    // var item = [""+sprite, 100, 100];
-    // renders = [item];
-    render(renders);
+        render(renders);
 
     // Stays on clip until a change happens
     if (true) { setTimeout(function(){action()}, 1000/fps) }
@@ -92,15 +87,14 @@ function action() {     //Runs the scene
 
 function render(renders) {    //Renderer
     context.clearRect(0, 0, canvas.width, canvas.height);       //Clear Screen
-    renders.forEach(function(item) {
-        if (typeof item[0] == "object") {
-            console.log(item[0])
+    renders.forEach(function(item) {                            //For each item in renders array
+        if (typeof item[0] == "object") {                       //If object, render image
             context.drawImage(item[0], item[1], item[2]);
             if (shownames){
                 context.fillText(item[3], item[1], item[2]);
             }
         }
-        else if (typeof item[0] == "string") {
+        else if (typeof item[0] == "string") {                  //If string, render string
             context.fillText(item[0], item[1], item[2]);
         }
     });
