@@ -2,18 +2,19 @@ var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 400;
+var shownames = true;
 
-var objects = [];
-var scenesArray = [];
+var renders = [];
+var scenes = [];
 
 function load() {
     // Collect all info from HTML
-    var scenes = document.getElementsByTagName("scene");
-    for (var i = 0; i < scenes.length; i++) {
+    var HTMLscenes = document.getElementsByTagName("scene");
+    for (var i = 0; i < HTMLscenes.length; i++) {
         var scene = {};
         var beatsArray = [];
-        scene.type = scenes[i].getAttribute("type")
-        var beats = scenes[i].getElementsByTagName("beat");
+        scene.type = HTMLscenes[i].getAttribute("type")
+        var beats = HTMLscenes[i].getElementsByTagName("beat");
         for (var i = 0; i < beats.length; i++) {
             var beat = {};
             var objectsArray = [];
@@ -21,8 +22,10 @@ function load() {
             var objects = beats[i].getElementsByTagName("object");
             for (var i = 0; i < objects.length; i++) {
                 var object = {};
-                object.x = objects[i].getAttribute("x");
-                object.y = objects[i].getAttribute("y");
+                object.x = parseInt(objects[i].getAttribute("x"));
+                object.y = parseInt(objects[i].getAttribute("y"));
+                object.name = objects[i].getAttribute("name");
+                
                 var sprites = objects[i].getElementsByTagName("sprite")
                 object.sprites = sprites;
                 objectsArray.push(object)
@@ -31,9 +34,10 @@ function load() {
             beatsArray.push(beat)
         }
         scene.beats = beatsArray;
-        scenesArray.push(scene)
+        scenes.push(scene)
     }
-    console.log(scenesArray)
+    console.log(scenes)
+    nextScene()
 }
 
 function nextScene() {
@@ -57,16 +61,16 @@ function level() {
 }
 
 
-function render(objects) {
-    objects.forEach(function(object) {
-        if (typeof object[2] == "object") {
-            context.drawImage(object[2], object[0], object[1]);
+function render(renders) {
+    renders.forEach(function(item) {
+        if (typeof item[0] == "object") {
+            context.drawImage(item[0], item[1], item[2]);
         }
-        else if (typeof object[2] == "string") {
-            context.fillText(object[2], object[0], object[1]);
+        else if (typeof item[0] == "string") {
+            context.fillText(item[0], item[1], item[2]);
         }
     })
 }
+window.onload = function () {load()}
 
-nextScene();
-load()
+
