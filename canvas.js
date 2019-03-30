@@ -1,12 +1,12 @@
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
+context.textStyle = "black";
 canvas.width = 600;
 canvas.height = 400;
 
 // Debug Feature
 var shownames = true;
 
-var renders = [];
 var scenes = [];
 var scene = {};
 var sceneNum = 0;
@@ -17,59 +17,65 @@ function load() {
     for (var i = 0; i < HTMLscenes.length; i++) {
         var scene = {};
         var beatsArray = [];
-        scene.type = HTMLscenes[i].getAttribute("type")
+        scene.type = HTMLscenes[i].getAttribute("type");
         var beats = HTMLscenes[i].getElementsByTagName("beat");
         for (var i = 0; i < beats.length; i++) {
             var beat = {};
             var objectsArray = [];
-            beat.frameLength = beats[i].getAttribute("frameLength");
+            beat.spriteLength = beats[i].getAttribute("spriteLength");
             var objects = beats[i].getElementsByTagName("object");
             for (var i = 0; i < objects.length; i++) {
                 var object = {};
-                object.x = parseInt(objects[i].getAttribute("x"));
-                object.y = parseInt(objects[i].getAttribute("y"));
+                object.x = parseInt(objects[i].getAttribute("x"), 16);
+                object.y = parseInt(objects[i].getAttribute("y"), 16);
                 object.name = objects[i].getAttribute("name");
                 
-                var sprites = objects[i].getElementsByTagName("sprite")
+                var sprites = objects[i].getElementsByTagName("sprite");
                 object.sprites = sprites;
-                objectsArray.push(object)
+                objectsArray.push(object);
             }
             beat.objects = objectsArray;
-            beatsArray.push(beat)
+            beatsArray.push(beat);
         }
         scene.beats = beatsArray;
-        scenes.push(scene)
+        scenes.push(scene);
     }
-    console.log(scenes)
-    nextScene()
+    nextScene();
 }
 
 function nextScene() {
     // Initiate Scene
     scene = scenes[sceneNum];
-
-    // Run Scene
-    if (true) { clip() }
-    if (false) { level() }
-    
-    // Maybe Better
-    // scene()
-    
     sceneNum++;
+    action();   // Run Scene
 }
 
-function clip() {
+var beat = 0;  //Here for now
+var sprite = 0;
+
+function action() {
+    var renders = [];
+    var beats = scene.beats;
+    var thisBeat = beats[beat];
+    
+
+    // When Button pressed
+    // beat++;
+    
+    sprite++;
+    if (sprite > thisBeat.spriteLength)
+    {
+        sprite = 0;
+    }
+    
+    renders = [""+sprite, 100, 100];
+    render(renders)
+
+    
     // Stays on clip until a change happens
-    if (true) { clip }
+    if (true) { action }
     else { nextScene }
 }
-
-function level() {
-    // Stays on level until a change happens
-    if (true) { level }
-    else { nextScene }
-}
-
 
 function render(renders) {
     renders.forEach(function(item) {
@@ -81,9 +87,10 @@ function render(renders) {
         }
         else if (typeof item[0] == "string") {
             context.fillText(item[0], item[1], item[2]);
+            console.log(item)   //Render not showing up
         }
-    })
+    });
 }
-window.onload = function () {load()}
+window.onload = function () {load()};
 
 
