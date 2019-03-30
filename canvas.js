@@ -6,12 +6,13 @@ canvas.height = 400;
 
 // Debug Feature
 var shownames = true;
+var fps = 30;
 
 var scenes = [];
 var scene = {};
 var sceneNum = 0;
 
-function load() {
+function load() {       //Loads in items from HTML
     // Collect all info from HTML
     var HTMLscenes = document.getElementsByTagName("scene");
     for (var i = 0; i < HTMLscenes.length; i++) {
@@ -43,8 +44,7 @@ function load() {
     nextScene();
 }
 
-function nextScene() {
-    // Initiate Scene
+function nextScene() {    // Initiate Scene
     scene = scenes[sceneNum];
     sceneNum++;
     action();   // Run Scene
@@ -53,7 +53,7 @@ function nextScene() {
 var beat = 0;  //Here for now
 var sprite = 0;
 
-function action() {
+function action() {     //Runs the scene
     var renders = [];
     var beats = scene.beats;
     var thisBeat = beats[beat];
@@ -67,17 +67,18 @@ function action() {
     {
         sprite = 0;
     }
-    
-    renders = [""+sprite, 100, 100];
-    render(renders)
+    var item = [""+sprite, 100, 100];
+    renders = [item];
+    render(renders);
 
     
     // Stays on clip until a change happens
-    if (true) { action }
+    if (true) { setTimeout(function(){action()}, 1000/fps) }
     else { nextScene }
 }
 
-function render(renders) {
+function render(renders) {    //Renderer
+    context.clearRect(0, 0, canvas.width, canvas.height);       //Clear Screen
     renders.forEach(function(item) {
         if (typeof item[0] == "object") {
             context.drawImage(item[0], item[1], item[2]);
@@ -87,10 +88,10 @@ function render(renders) {
         }
         else if (typeof item[0] == "string") {
             context.fillText(item[0], item[1], item[2]);
-            console.log(item)   //Render not showing up
         }
     });
 }
-window.onload = function () {load()};
+
+window.onload = function () {load()};       //Run program after page loads
 
 
