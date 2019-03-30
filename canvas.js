@@ -61,7 +61,6 @@ var beat = 0; //Here for now
 var sprite = 0;
 
 async function action() { //Runs the scene
-    console.log(beat)
     var renders = [];
     var beats = scene.beats;
     var thisBeat = beats[beat];     //Issue retrieving beat at beats[beats.length] Issue exists in load
@@ -78,12 +77,19 @@ async function action() { //Runs the scene
     //Sprite index
     objects.forEach(function(object) {
         var si = parseInt(sprite / (thisBeat.spriteLength / object.sprites.length), 16);
+        console.log(object.sprites)
+        if(object.sprites[si].src != "")
+        {
         var item = [];
         item.push(object.sprites[si]);
         item.push(object.x);
         item.push(object.y);
         item.push(object.name);
         renders.push(item);
+        }
+        else{
+            beat++;
+        }
     });
     render(renders);
 
