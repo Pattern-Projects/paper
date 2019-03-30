@@ -11,30 +11,24 @@ function load(){
 
 }
 
-function clipStart(){
-    // Initiate Clip
+function nextScene(){
+    // Initiate Scene
     
-    // Run Clip
-    clip()
-}
-
-function levelStart(){
-    // Inititate Level
-    
-    // Run Level
-    level()
+    // Run Scene
+    if (true){clip()}
+    if (false){level()}
 }
 
 function clip(){
     // Stays on clip until a change happens
     if (true){clip}
-    else{levelStart}
+    else{nextScene}
 }
 
 function level(){
     // Stays on level until a change happens
     if (true){level}
-    else{clipStart}
+    else{nextScene}
 }
 
 
@@ -49,4 +43,4 @@ function render(objects) {
     })
 }
 
-clipStart();
+nextScene();
