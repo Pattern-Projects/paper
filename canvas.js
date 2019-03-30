@@ -3,16 +3,22 @@ var context = canvas.getContext("2d");
 context.textStyle = "black";
 canvas.width = 600;
 canvas.height = 400;
+window.addEventListener('keydown', this.keyDown, false);
 
-// Debug Feature
+
+
+
+// Debug Features
 var shownames = true;
 var fps = 30;
 
 var scenes = [];
+var input = {};
 var scene = {};
 var sceneNum = 0;
+var fire = false;
 
-function load() {       //Loads in items from HTML
+function load() { //Loads in items from HTML
     // Collect all info from HTML
     var HTMLscenes = document.getElementsByTagName("scene");
     for (var i = 0; i < HTMLscenes.length; i++) {
@@ -30,7 +36,7 @@ function load() {       //Loads in items from HTML
                 object.x = parseInt(objects[i].getAttribute("x"), 16);
                 object.y = parseInt(objects[i].getAttribute("y"), 16);
                 object.name = objects[i].getAttribute("name");
-                
+
                 var sprites = objects[i].getElementsByTagName("img");
                 object.sprites = sprites;
                 objectsArray.push(object);
@@ -44,16 +50,16 @@ function load() {       //Loads in items from HTML
     nextScene();
 }
 
-function nextScene() {    // Initiate Scene
+function nextScene() { // Initiate Scene
     scene = scenes[sceneNum];
     sceneNum++;
-    action();   // Run Scene
+    action(); // Run Scene
 }
 
-var beat = 0;  //Here for now
+var beat = 0; //Here for now
 var sprite = 0;
 
-function action() {     //Runs the scene
+async function action() { //Runs the scene
     var renders = [];
     var beats = scene.beats;
     var thisBeat = beats[beat];
@@ -61,45 +67,73 @@ function action() {     //Runs the scene
     
     // When Button pressed
     // beat++;
+    var test = await getInput();
+
+    function getInput(){
+        
     
+    if (!input[38]){
+        fire = false;
+    }
+    
+    if (input[38]){
+        if (!fire){
+        fire = true;
+        //Key Pressed
+        }
+    }
+    
+    }
+    
+
     sprite++;
-    if (sprite >= thisBeat.spriteLength)
-    {
+    if (sprite >= thisBeat.spriteLength) {
         sprite = 0;
     }
-    //Sprite index
-    objects.forEach(function(object){
-    var si = parseInt(sprite/(thisBeat.spriteLength/object.sprites.length), 16);
-         var item = [];
-         item.push(object.sprites[si]);
-         item.push(object.x);
-         item.push(object.y);
-         item.push(object.name);
-         renders.push(item);
-    });
     
-        render(renders);
+    //Sprite index
+    objects.forEach(function(object) {
+        var si = parseInt(sprite / (thisBeat.spriteLength / object.sprites.length), 16);
+        var item = [];
+        item.push(object.sprites[si]);
+        item.push(object.x);
+        item.push(object.y);
+        item.push(object.name);
+        renders.push(item);
+    });
+    render(renders);
+
+    //Need to detect button press
+    //When pressed advance to next beat
 
     // Stays on clip until a change happens
-    if (true) { setTimeout(function(){action()}, 1000/fps) }
+    if (true) { setTimeout(function() { action() }, 1000 / fps) }
     else { nextScene }
 }
 
-function render(renders) {    //Renderer
-    context.clearRect(0, 0, canvas.width, canvas.height);       //Clear Screen
-    renders.forEach(function(item) {                            //For each item in renders array
-        if (typeof item[0] == "object") {                       //If object, render image
+function render(renders) { //Renderer
+    context.clearRect(0, 0, canvas.width, canvas.height); //Clear Screen
+    renders.forEach(function(item) { //For each item in renders array
+        if (typeof item[0] == "object") { //If object, render image
             context.drawImage(item[0], item[1], item[2]);
-            if (shownames){
+            if (shownames) {
                 context.fillText(item[3], item[1], item[2]);
             }
         }
-        else if (typeof item[0] == "string") {                  //If string, render string
+        else if (typeof item[0] == "string") { //If string, render string
             context.fillText(item[0], item[1], item[2]);
         }
     });
 }
 
-window.onload = function () {load()};       //Run program after page loads
+function keyDown(e) {
+    var code = e.keyCode;
+    document.onkeydown = function() {
+        input[e.keyCode] = true;
+    }
+    document.onkeyup = function() {
+        input[e.keyCode] = false;
+    }
+}
 
-
+window.onload = function() { load() }; //Run program after page loads
