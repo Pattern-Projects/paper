@@ -2,10 +2,14 @@ var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
 canvas.width = 600;
 canvas.height = 400;
+
+// Debug Feature
 var shownames = true;
 
 var renders = [];
 var scenes = [];
+var scene = {};
+var sceneNum = 0;
 
 function load() {
     // Collect all info from HTML
@@ -42,10 +46,16 @@ function load() {
 
 function nextScene() {
     // Initiate Scene
+    scene = scenes[sceneNum];
 
     // Run Scene
     if (true) { clip() }
     if (false) { level() }
+    
+    // Maybe Better
+    // scene()
+    
+    sceneNum++;
 }
 
 function clip() {
@@ -65,6 +75,9 @@ function render(renders) {
     renders.forEach(function(item) {
         if (typeof item[0] == "object") {
             context.drawImage(item[0], item[1], item[2]);
+            if (shownames){
+                context.fillText(item[3], item[1], item[2]);
+            }
         }
         else if (typeof item[0] == "string") {
             context.fillText(item[0], item[1], item[2]);
