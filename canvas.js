@@ -28,21 +28,22 @@ function load() { //Loads in items from HTML
         var beats = HTMLscenes[i].getElementsByTagName("beat");
         for (var i = 0; i < beats.length; i++) {
             var beat = {};
-            var objectsArray = [];
+            var objectsArray = []; 
             beat.spriteLength = beats[i].getAttribute("spriteLength");
             var objects = beats[i].getElementsByTagName("object");
-            for (var i = 0; i < objects.length; i++) {
+            for (var j = 0; j < objects.length; j++) {
                 var object = {};
-                object.x = parseInt(objects[i].getAttribute("x"), 16);
-                object.y = parseInt(objects[i].getAttribute("y"), 16);
-                object.name = objects[i].getAttribute("name");
+                object.x = parseInt(objects[j].getAttribute("x"), 16);
+                object.y = parseInt(objects[j].getAttribute("y"), 16);
+                object.name = objects[j].getAttribute("name");
 
-                var sprites = objects[i].getElementsByTagName("img");
+                var sprites = objects[j].getElementsByTagName("img");
                 object.sprites = sprites;
                 objectsArray.push(object);
             }
             beat.objects = objectsArray;
             beatsArray.push(beat);
+            
         }
         scene.beats = beatsArray;
         scenes.push(scene);
@@ -60,30 +61,13 @@ var beat = 0; //Here for now
 var sprite = 0;
 
 async function action() { //Runs the scene
+    console.log(beat)
     var renders = [];
     var beats = scene.beats;
-    var thisBeat = beats[beat];
+    var thisBeat = beats[beat];     //Issue retrieving beat at beats[beats.length] Issue exists in load
     var objects = thisBeat.objects;
+    await getInput();
     
-    // When Button pressed
-    // beat++;
-    var test = await getInput();
-
-    function getInput(){
-        
-    
-    if (!input[38]){
-        fire = false;
-    }
-    
-    if (input[38]){
-        if (!fire){
-        fire = true;
-        //Key Pressed
-        }
-    }
-    
-    }
     
 
     sprite++;
@@ -105,10 +89,33 @@ async function action() { //Runs the scene
 
     //Need to detect button press
     //When pressed advance to next beat
+    function getInput(){
+    
+    if (!input[38]){
+        fire = false;
+    }
+    
+    if (input[38]){
+        if (!fire){
+        fire = true;
+        // Key Press Detected
+        beat++
+        }
+    }
+    
+    }
+
+    //Loop beats when too high    
+    if (beat >= beats.length){
+        beat = 0;
+    }
 
     // Stays on clip until a change happens
     if (true) { setTimeout(function() { action() }, 1000 / fps) }
     else { nextScene }
+    // When Button pressed
+    // beat++;
+
 }
 
 function render(renders) { //Renderer
