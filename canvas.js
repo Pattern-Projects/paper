@@ -57,8 +57,8 @@ function action() {     //Runs the scene
     var renders = [];
     var beats = scene.beats;
     var thisBeat = beats[beat];
+    var objects = thisBeat.objects;
     
-
     // When Button pressed
     // beat++;
     
@@ -67,27 +67,34 @@ function action() {     //Runs the scene
     {
         sprite = 0;
     }
-    
+    var whell = document.getElementsByTagName("img");
     //Sprite index
-    var si = parseInt(sprite/(thisBeat.spriteLength/3));
+    var si = parseInt(sprite/(thisBeat.spriteLength/3), 16);
+    objects.forEach(function(object){
+         var item = [];
+         item.push(object.sprites[si]);
+        //  item.push(whell[0]);
+         item.push(object.x);
+         item.push(object.y);
+         renders.push(item);
+    });
+    
     
     // Testing
-    var item = [""+sprite, 100, 100];
-    renders = [item];
+    // var item = [""+sprite, 100, 100];
+    // renders = [item];
     render(renders);
 
-    if (sprite < thisBeat.spriteLength)
-    {
     // Stays on clip until a change happens
     if (true) { setTimeout(function(){action()}, 1000/fps) }
     else { nextScene }
-}
 }
 
 function render(renders) {    //Renderer
     context.clearRect(0, 0, canvas.width, canvas.height);       //Clear Screen
     renders.forEach(function(item) {
         if (typeof item[0] == "object") {
+            console.log(item[0])
             context.drawImage(item[0], item[1], item[2]);
             if (shownames){
                 context.fillText(item[3], item[1], item[2]);
