@@ -53,6 +53,11 @@ function load() { //Loads in items from HTML
 function nextScene() { // Initiate Scene
     scene = scenes[sceneNum];
     sceneNum++;
+    if (sceneNum >= scenes.length)
+    {
+        sceneNum = 0;
+    }
+    
     action(); // Run Scene
 }
 
@@ -115,6 +120,8 @@ async function action() { //Runs the scene
     //Loop beats when too high    
     if (beat >= beats.length) {
         beat = 0;
+        sprite = 0;
+        nextScene()
     }
 
     // Stays on clip until a change happens
