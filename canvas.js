@@ -50,7 +50,10 @@ function load() { //Loads in items from HTML
     nextScene();
 }
 
+var loop;       //here for now
 function nextScene() { // Initiate Scene
+        clearTimeout(loop);
+
     scene = scenes[sceneNum];
     sceneNum++;
     if (sceneNum >= scenes.length)
@@ -83,6 +86,7 @@ async function action() { //Runs the scene
     //Sprite index
     objects.forEach(function(object) {
         var spriteIndex = parseInt(sprite / (thisBeat.spriteLength / object.sprites.length), 16);
+        console.log(spriteIndex)
         if (object.sprites[spriteIndex].src != "") {
             var item = [];
             item.push(object.sprites[spriteIndex]);
@@ -121,11 +125,11 @@ async function action() { //Runs the scene
     if (beat >= beats.length) {
         beat = 0;
         sprite = 0;
-        nextScene()
+        nextScene();
     }
 
     // Stays on clip until a change happens
-    if (true) { setTimeout(function() { action() }, 1000 / fps) }
+    if (true) { loop = setTimeout(function() { action() }, 1000 / fps) }
     else { nextScene }
     // When Button pressed
     // beat++;
