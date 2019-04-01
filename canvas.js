@@ -17,27 +17,32 @@ var input = {};
 var scene = {};
 var sceneNum = 0;
 var fire = false;
+var player = { x: 0, y: 0 };
 
 function load() { //Loads in items from HTML
     // Collect all info from HTML
     var HTMLscenes = document.getElementsByTagName("scene");
-    for (var i = 0; i < HTMLscenes.length; i++) {                       //Every scene in document
+    for (var i = 0; i < HTMLscenes.length; i++) { //Every scene in document
         var scene = {};
         var beatsArray = [];
         scene.type = HTMLscenes[i].getAttribute("type");
         var beats = HTMLscenes[i].getElementsByTagName("beat");
-        for (var j = 0; j < beats.length; j++) {                        //Every beat in scene
+        for (var j = 0; j < beats.length; j++) { //Every beat in scene
             var beat = {};
             var objectsArray = [];
             beat.spriteLength = beats[j].getAttribute("spriteLength");
             var objects = beats[j].getElementsByTagName("object");
-            for (var k = 0; k < objects.length; k++) {                  //Every object in beat
+            for (var k = 0; k < objects.length; k++) { //Every object in beat
                 var object = {};
                 object.x = parseInt(objects[k].getAttribute("x"), 16);
                 object.y = parseInt(objects[k].getAttribute("y"), 16);
                 object.name = objects[k].getAttribute("name");
+                if (object.name == "player") {
+                    player.x = object.x;
+                    player.y = object.y;
+                }
 
-                var sprites = objects[k].getElementsByTagName("img");   //Every sprite in object
+                var sprites = objects[k].getElementsByTagName("img"); //Every sprite in object
                 object.sprites = sprites;
                 objectsArray.push(object);
             }
@@ -50,23 +55,33 @@ function load() { //Loads in items from HTML
     nextScene();
 }
 
-var loop;       //here for now
+var restrained = { 39: true };
+var loop; //here for now
 function nextScene() { // Initiate Scene
-        clearTimeout(loop);
+    clearTimeout(loop);
 
     scene = scenes[sceneNum];
     sceneNum++;
-    if (sceneNum >= scenes.length)
-    {
+    if (sceneNum >= scenes.length) {
         sceneNum = 0;
     }
-    
+
+    if(scene.type == "clip")
+    {
+        restrained = { 39: true };
+    }
+    if(scene.type == "level")
+    {
+        restrained = {};
+    }
+
     action(); // Run Scene
 }
 
 var beat = 0; //Here for now
 var sprite = 0;
 var command = {};
+
 
 async function action() { //Runs the scene
     var renders = [];
@@ -75,11 +90,25 @@ async function action() { //Runs the scene
     var objects = thisBeat.objects;
 
     //Commands
-    if (command[39])
-    {
-        nextBeat();
+    if (command[39]) {
+        if (scene.type == "clip") {
+            nextBeat();
+        }
+        if (scene.type == "level") {
+            player.x += 5;
+        }
+    }
+    if (command[37]) {
+        player.x -= 5;
+    }
+    if (command[38]) {
+        player.y += 5;
+    }
+    if (command[40]) {
+        player.y -= 5;
     }
     command = {};
+
 
     //Iterate sprites, loop when too high
     sprite++;
@@ -87,14 +116,21 @@ async function action() { //Runs the scene
         sprite = 0;
     }
 
-    //Sprite index
+    //Send objects to renderer
+    //If sprite src is empty move to next beat
     objects.forEach(function(object) {
         var spriteIndex = parseInt(sprite / (thisBeat.spriteLength / object.sprites.length), 16);
         if (object.sprites[spriteIndex].src != "") {
             var item = [];
             item.push(object.sprites[spriteIndex]);
-            item.push(object.x);
-            item.push(object.y);
+            if (object.name == "player") {
+                item.push(player.x);
+                item.push(player.y);
+            }
+            else {
+                item.push(object.x);
+                item.push(object.y);
+            }
             item.push(object.name);
             renders.push(item);
         }
@@ -104,7 +140,7 @@ async function action() { //Runs the scene
     });
     render(renders);
 
-    function nextBeat(){
+    function nextBeat() {
         beat++;
         sprite = 0;
     }
@@ -119,10 +155,6 @@ async function action() { //Runs the scene
 
     // Stays on clip until a change happens
     if (true) { loop = setTimeout(function() { action() }, 1000 / fps) }
-    else { nextScene }
-    // When Button pressed
-    // beat++;
-
 }
 
 function render(renders) { //Renderer
@@ -130,7 +162,7 @@ function render(renders) { //Renderer
     renders.forEach(function(item) { //For each item in renders array
         if (typeof item[0] == "object") { //If object, render image
             context.drawImage(item[0], item[1], item[2]);
-            if (shownames) {                //If shownames setting true show object names
+            if (shownames) { //If shownames setting true show object names
                 context.fillText(item[3], item[1], item[2]);
             }
         }
@@ -141,23 +173,21 @@ function render(renders) { //Renderer
 }
 
 var fired = {};
-var restrained = {39:true};
 
-function keyDown(e) {       //Log key presses
+async function keyDown(e) { //Log key presses
     var code = e.keyCode;
-    
     //If checked check
-    
+
     document.onkeydown = function() {
         //If this key is restrained it only fires once per press
-        if(restrained[code])
-        {
+        if (restrained[code]) {
             //If it is not fired, fire now
-            if (fired[code] != true){
+            if (fired[code] != true) {
                 fired[code] = true;
                 command[code] = true;
             }
-        }else{
+        }
+        else{
             command[code] = true;
         }
     }
