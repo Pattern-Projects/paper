@@ -75,7 +75,10 @@ async function action() { //Runs the scene
     var objects = thisBeat.objects;
 
     //Commands
-    console.log(command);
+    if (command[39])
+    {
+        nextBeat();
+    }
     command = {};
 
     //Iterate sprites, loop when too high
