@@ -70,13 +70,17 @@ var sprite = 0;
 async function action() { //Runs the scene
     var renders = [];
     var beats = scene.beats;
-    var thisBeat = beats[beat]; //Issue retrieving beat at beats[beats.length] Issue exists in load
+    var thisBeat = beats[beat];
     var objects = thisBeat.objects;
 
+    if (scene.type == "clip")
+    {
     await getInput();
-    //Different inputs responses depending on beat
+    //Put different inputs responses depending on beat
     //Here..
-
+    }
+    
+    
     //Iterate sprites, loop when too high
     sprite++;
     if (sprite >= thisBeat.spriteLength) {
@@ -118,7 +122,6 @@ async function action() { //Runs the scene
                 sprite = 0;
             }
         }
-
     }
 
     //Loop beats when too high    
@@ -141,7 +144,7 @@ function render(renders) { //Renderer
     renders.forEach(function(item) { //For each item in renders array
         if (typeof item[0] == "object") { //If object, render image
             context.drawImage(item[0], item[1], item[2]);
-            if (shownames) {
+            if (shownames) {                //If shownames setting true show object names
                 context.fillText(item[3], item[1], item[2]);
             }
         }
@@ -151,7 +154,7 @@ function render(renders) { //Renderer
     });
 }
 
-function keyDown(e) {
+function keyDown(e) {       //Log key presses
     var code = e.keyCode;
     document.onkeydown = function() {
         input[e.keyCode] = true;
