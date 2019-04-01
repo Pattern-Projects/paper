@@ -66,6 +66,7 @@ function nextScene() { // Initiate Scene
 
 var beat = 0; //Here for now
 var sprite = 0;
+var command = {};
 
 async function action() { //Runs the scene
     var renders = [];
@@ -73,14 +74,10 @@ async function action() { //Runs the scene
     var thisBeat = beats[beat];
     var objects = thisBeat.objects;
 
-    if (scene.type == "clip")
-    {
-    await getInput();
-    //Put different inputs responses depending on beat
-    //Here..
-    }
-    
-    
+    //Commands
+    console.log(command);
+    command = {};
+
     //Iterate sprites, loop when too high
     sprite++;
     if (sprite >= thisBeat.spriteLength) {
@@ -90,7 +87,6 @@ async function action() { //Runs the scene
     //Sprite index
     objects.forEach(function(object) {
         var spriteIndex = parseInt(sprite / (thisBeat.spriteLength / object.sprites.length), 16);
-        console.log(spriteIndex)
         if (object.sprites[spriteIndex].src != "") {
             var item = [];
             item.push(object.sprites[spriteIndex]);
@@ -100,29 +96,16 @@ async function action() { //Runs the scene
             renders.push(item);
         }
         else {
-            beat++;
-            sprite = 0;
+            nextBeat();
         }
     });
     render(renders);
 
-    //detect button press
-    //When pressed advance to next beat
-    function getInput() {
-
-        if (!input[39]) {
-            fire = false;
-        }
-
-        if (input[39]) {
-            if (!fire) {
-                fire = true;
-                // Key Press Detected
-                beat++;
-                sprite = 0;
-            }
-        }
+    function nextBeat(){
+        beat++;
+        sprite = 0;
     }
+
 
     //Loop beats when too high    
     if (beat >= beats.length) {
@@ -154,13 +137,29 @@ function render(renders) { //Renderer
     });
 }
 
+var fired = {};
+var restrained = {39:true};
+
 function keyDown(e) {       //Log key presses
     var code = e.keyCode;
+    
+    //If checked check
+    
     document.onkeydown = function() {
-        input[e.keyCode] = true;
+        //If this key is restrained it only fires once per press
+        if(restrained[code])
+        {
+            //If it is not fired, fire now
+            if (fired[code] != true){
+                fired[code] = true;
+                command[code] = true;
+            }
+        }else{
+            command[code] = true;
+        }
     }
     document.onkeyup = function() {
-        input[e.keyCode] = false;
+        delete fired[code];
     }
 }
 
