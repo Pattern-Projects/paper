@@ -101,10 +101,10 @@ async function action() { //Runs the scene
     if (command[37]) {
         player.x -= 5;
     }
-    if (command[38]) {
+    if (command[40]) {
         player.y += 5;
     }
-    if (command[40]) {
+    if (command[38]) {
         player.y -= 5;
     }
     command = {};
@@ -184,11 +184,11 @@ async function keyDown(e) { //Log key presses
             //If it is not fired, fire now
             if (fired[code] != true) {
                 fired[code] = true;
-                command[code] = true;
+                command[code] = e.type == 'keydown';
             }
         }
         else{
-            command[code] = true;
+            command[code] = e.type == 'keydown';
         }
     }
     document.onkeyup = function() {
