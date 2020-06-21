@@ -1,10 +1,7 @@
-Level Development Branch:
-- Develop functionality of levels
-  + Collectibles
-  + Goals
-  + Object Speed
-  + Object Momentum
-  + Button functions
+Rework Load Branch:
+- Rework load for better functionality
+  + Load only this and next scene
+  + nextScene swaps and loads up next scene
 
 Paper!
 
