@@ -19,6 +19,62 @@ var sceneNum = 0;
 var fire = false;
 var player = { x: 0, y: 0 };
 
+var HTMLscenes = document.getElementsByTagName("scene");
+var numScenes = HTMLscenes.length;
+var nextSceneUp = {};
+
+function initLoop() { //First calls of loadScene
+  loadScene(sceneNum);
+  transitionScene();
+}
+
+function transitionScene() {
+  clearTimeout(loop);
+
+  scene = nextSceneUp;
+  nextSceneUp = loadScene(sceneNum+1);
+  sceneNum++;
+  console.log(scene);
+  
+  action();
+
+
+}
+
+function loadScene(sceneNum) {
+  console.log(sceneNum); //sceneNum right?
+
+  var scene = {};
+  var beatsArray = [];
+  this.scene.type = HTMLscenes[sceneNum].getAttribute("type");
+  var beats = HTMLscenes[sceneNum].getElementsByTagName("beat");
+  for (var j = 0; j < beats.length; j++) { //Every beat in scene
+      var beat = {};
+      var objectsArray = [];
+      beat.spriteLength = beats[j].getAttribute("spriteLength");
+      var objects = beats[j].getElementsByTagName("object");
+      for (var k = 0; k < objects.length; k++) { //Every object in beat
+          var object = {};
+          object.x = parseInt(objects[k].getAttribute("x"), 16);
+          object.y = parseInt(objects[k].getAttribute("y"), 16);
+          object.name = objects[k].getAttribute("name");
+          if (object.name == "player") {
+              player.x = object.x;
+              player.y = object.y;
+          }
+
+          var sprites = objects[k].getElementsByTagName("img"); //Every sprite in object
+          object.sprites = sprites;
+          objectsArray.push(object);
+      }
+      beat.objects = objectsArray;
+      beatsArray.push(beat);
+    }
+      this.scene.beats = beatsArray;
+
+      return scene;
+}
+
 function load() { //Loads in items from HTML
     // Collect all info from HTML
     var HTMLscenes = document.getElementsByTagName("scene");
@@ -57,6 +113,7 @@ function load() { //Loads in items from HTML
 
 var restrained = { 39: true };
 var loop; //here for now
+
 function nextScene() { // Initiate Scene
     clearTimeout(loop);
 
@@ -84,6 +141,7 @@ var command = {};
 
 
 async function action() { //Runs the scene
+
     var renders = [];
     var beats = scene.beats;
     var thisBeat = beats[beat];
@@ -146,7 +204,7 @@ async function action() { //Runs the scene
     }
 
 
-    //Loop beats when too high    
+    //Loop beats when too high
     if (beat >= beats.length) {
         beat = 0;
         sprite = 0;
@@ -196,4 +254,5 @@ async function keyDown(e) { //Log key presses
     }
 }
 
-window.onload = function() { load() }; //Run program after page loads
+//window.onload = function() { load() }; //Run program after page loads
+window.onload = function() { initLoop() }; //Run program after page loads
