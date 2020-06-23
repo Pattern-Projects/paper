@@ -23,6 +23,10 @@ var HTMLscenes = document.getElementsByTagName("scene");
 var numScenes = HTMLscenes.length;
 var nextSceneUp = {};
 
+var fired = {};
+var restrained = { 39: true };
+var loop; //here for now
+
 function initLoop() { //First calls of loadScene
   loadScene(sceneNum);
   transitionScene();
@@ -31,23 +35,39 @@ function initLoop() { //First calls of loadScene
 function transitionScene() {
   clearTimeout(loop);
 
+
   scene = nextSceneUp;
-  nextSceneUp = loadScene(sceneNum+1);
+
   sceneNum++;
-  console.log(scene);
-  
+
+  if (sceneNum >= numScenes) {
+      sceneNum = 0;
+  }
+  console.log(nextSceneUp)
+  nextSceneUp = loadScene(sceneNum);
+  console.log(nextSceneUp)
+
+  if(scene.type == "clip")
+  {
+      restrained = { 39: true };
+  }
+  if(scene.type == "level")
+  {
+      restrained = {};
+  }
+
   action();
 
 
 }
 
 function loadScene(sceneNum) {
-  console.log(sceneNum); //sceneNum right?
+  console.log(this.sceneNum); //sceneNum right?
 
   var scene = {};
   var beatsArray = [];
-  this.scene.type = HTMLscenes[sceneNum].getAttribute("type");
-  var beats = HTMLscenes[sceneNum].getElementsByTagName("beat");
+  this.scene.type = HTMLscenes[this.sceneNum].getAttribute("type");
+  var beats = HTMLscenes[this.sceneNum].getElementsByTagName("beat");
   for (var j = 0; j < beats.length; j++) { //Every beat in scene
       var beat = {};
       var objectsArray = [];
@@ -72,7 +92,7 @@ function loadScene(sceneNum) {
     }
       this.scene.beats = beatsArray;
 
-      return scene;
+      return this.scene;
 }
 
 function load() { //Loads in items from HTML
@@ -111,17 +131,12 @@ function load() { //Loads in items from HTML
     nextScene();
 }
 
-var restrained = { 39: true };
-var loop; //here for now
 
 function nextScene() { // Initiate Scene
     clearTimeout(loop);
 
     scene = scenes[sceneNum];
     sceneNum++;
-    if (sceneNum >= scenes.length) {
-        sceneNum = 0;
-    }
 
     if(scene.type == "clip")
     {
@@ -208,7 +223,7 @@ async function action() { //Runs the scene
     if (beat >= beats.length) {
         beat = 0;
         sprite = 0;
-        nextScene();
+        transitionScene();
     }
 
     // Stays on clip until a change happens
@@ -230,12 +245,10 @@ function render(renders) { //Renderer
     });
 }
 
-var fired = {};
 
 async function keyDown(e) { //Log key presses
     var code = e.keyCode;
     //If checked check
-
     document.onkeydown = function() {
         //If this key is restrained it only fires once per press
         if (restrained[code]) {
