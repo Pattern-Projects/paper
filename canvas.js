@@ -12,16 +12,15 @@ window.addEventListener('keydown', this.keyDown, false);
 var shownames = true;
 var fps = 30;
 
-var scenes = [];
 var input = {};
 var scene = {};
 var sceneNum = 0;
 var fire = false;
 var player = { x: 0, y: 0 };
 
-var HTMLscenes = document.getElementsByTagName("scene");
-console.log(HTMLscenes)
-var numScenes = HTMLscenes.length;
+var scenes = document.getElementsByTagName("scene");
+console.log(scenes)
+var numScenes = scenes.length;
 var nextSceneUp = {};
 
 var fired = {};
@@ -30,10 +29,10 @@ var loop; //here for now
 
 function initLoop() { //First calls of loadScene
   loadScene(sceneNum);
-  transitionScene();
+  nextScene();
 }
 
-function transitionScene() {
+function nextScene() {
   clearTimeout(loop);
 
 
@@ -66,8 +65,8 @@ function loadScene(sceneNum) {
 
   var scene = {};
   var beatsArray = [];
-  this.scene.type = HTMLscenes[this.sceneNum].getAttribute("type");
-  var beats = HTMLscenes[this.sceneNum].getElementsByTagName("beat");
+  this.scene.type = scenes[this.sceneNum].getAttribute("type");
+  var beats = scenes[this.sceneNum].getElementsByTagName("beat");
   for (var j = 0; j < beats.length; j++) { //Every beat in scene
       var beat = {};
       var objectsArray = [];
@@ -168,7 +167,7 @@ async function action() { //Runs the scene
     if (beat >= beats.length) {
         beat = 0;
         sprite = 0;
-        transitionScene();
+        nextScene();
     }
 
     // Stays on clip until a change happens
