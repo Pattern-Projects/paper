@@ -20,6 +20,7 @@ var fire = false;
 var player = { x: 0, y: 0 };
 
 var HTMLscenes = document.getElementsByTagName("scene");
+console.log(HTMLscenes)
 var numScenes = HTMLscenes.length;
 var nextSceneUp = {};
 
@@ -62,7 +63,6 @@ function transitionScene() {
 }
 
 function loadScene(sceneNum) {
-  console.log(this.sceneNum); //sceneNum right?
 
   var scene = {};
   var beatsArray = [];
@@ -93,61 +93,6 @@ function loadScene(sceneNum) {
       this.scene.beats = beatsArray;
 
       return this.scene;
-}
-
-function load() { //Loads in items from HTML
-    // Collect all info from HTML
-    var HTMLscenes = document.getElementsByTagName("scene");
-    for (var i = 0; i < HTMLscenes.length; i++) { //Every scene in document
-        var scene = {};
-        var beatsArray = [];
-        scene.type = HTMLscenes[i].getAttribute("type");
-        var beats = HTMLscenes[i].getElementsByTagName("beat");
-        for (var j = 0; j < beats.length; j++) { //Every beat in scene
-            var beat = {};
-            var objectsArray = [];
-            beat.spriteLength = beats[j].getAttribute("spriteLength");
-            var objects = beats[j].getElementsByTagName("object");
-            for (var k = 0; k < objects.length; k++) { //Every object in beat
-                var object = {};
-                object.x = parseInt(objects[k].getAttribute("x"), 16);
-                object.y = parseInt(objects[k].getAttribute("y"), 16);
-                object.name = objects[k].getAttribute("name");
-                if (object.name == "player") {
-                    player.x = object.x;
-                    player.y = object.y;
-                }
-
-                var sprites = objects[k].getElementsByTagName("img"); //Every sprite in object
-                object.sprites = sprites;
-                objectsArray.push(object);
-            }
-            beat.objects = objectsArray;
-            beatsArray.push(beat);
-        }
-        scene.beats = beatsArray;
-        scenes.push(scene);
-    }
-    nextScene();
-}
-
-
-function nextScene() { // Initiate Scene
-    clearTimeout(loop);
-
-    scene = scenes[sceneNum];
-    sceneNum++;
-
-    if(scene.type == "clip")
-    {
-        restrained = { 39: true };
-    }
-    if(scene.type == "level")
-    {
-        restrained = {};
-    }
-
-    action(); // Run Scene
 }
 
 var beat = 0; //Here for now
