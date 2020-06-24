@@ -19,7 +19,6 @@ var player = { x: 0, y: 0 };
 
 //loadScene variables
 var scenes = [].slice.call(document.getElementsByTagName("scene")).reverse();
-
 var numScenes = scenes.length;
 var nextSceneUp = {};
 
