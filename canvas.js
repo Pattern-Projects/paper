@@ -12,17 +12,23 @@ window.addEventListener('keydown', this.keyDown, false);
 var shownames = true;
 var fps = 30;
 
-var input = {};
 var scene = {};
 var sceneNum = 0;
 var fire = false;
 var player = { x: 0, y: 0 };
 
+//loadScene variables
 var scenes = [].slice.call(document.getElementsByTagName("scene")).reverse();
 
 var numScenes = scenes.length;
 var nextSceneUp = {};
 
+//Action Variables
+var beat = 0;
+var sprite = 0;
+var command = {};
+
+//Keypress Variables
 var fired = {};
 var restrained = { 39: true };
 var loop; //here for now
@@ -91,10 +97,6 @@ function loadScene(sceneNum) {
 
       return this.scene;
 }
-
-var beat = 0; //Here for now
-var sprite = 0;
-var command = {};
 
 
 async function action() { //Runs the scene
