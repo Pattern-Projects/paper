@@ -20,7 +20,6 @@ var player = { x: 0, y: 0 };
 
 var scenes = [].slice.call(document.getElementsByTagName("scene")).reverse();
 
-console.log(scenes)
 var numScenes = scenes.length;
 var nextSceneUp = {};
 
@@ -44,9 +43,7 @@ function nextScene() {
   if (sceneNum >= numScenes) {
       sceneNum = 0;
   }
-  console.log(nextSceneUp)
   nextSceneUp = loadScene(sceneNum);
-  console.log(nextSceneUp)
 
   if(scene.type == "clip")
   {
