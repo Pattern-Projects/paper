@@ -18,7 +18,8 @@ var sceneNum = 0;
 var fire = false;
 var player = { x: 0, y: 0 };
 
-var scenes = document.getElementsByTagName("scene");
+var scenes = [].slice.call(document.getElementsByTagName("scene")).reverse();
+
 console.log(scenes)
 var numScenes = scenes.length;
 var nextSceneUp = {};
