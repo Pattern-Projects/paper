@@ -12,6 +12,7 @@ window.addEventListener('keydown', this.keyDown, false);
 var shownames = true;
 var fps = 30;
 
+// Scene variables
 var scene = {};
 var sceneNum = 0;
 var fire = false;
@@ -37,17 +38,20 @@ function initLoop() { //First calls of loadScene
   nextScene();
 }
 
-function nextScene() {
+function nextScene() { // Transition to next scene the buffer the scene after
+  // Clear action loop
   clearTimeout(loop);
 
-
+  // Transition to next scene
   scene = nextSceneUp;
-
   sceneNum++;
 
+  // Loop to first when out of scenes
   if (sceneNum >= numScenes) {
       sceneNum = 0;
   }
+
+  // Buffer next scene
   nextSceneUp = loadScene(sceneNum);
 
   if(scene.type == "clip")
@@ -59,12 +63,13 @@ function nextScene() {
       restrained = {};
   }
 
+  // Activate action loop
   action();
 
 
 }
 
-function loadScene(sceneNum) {
+function loadScene(sceneNum) { // Load scene for sceneNum from html
 
   var scene = {};
   var beatsArray = [];
@@ -105,7 +110,7 @@ async function action() { //Runs the scene
     var thisBeat = beats[beat];
     var objects = thisBeat.objects;
 
-    //Commands
+    //Commands behavior
     if (command[39]) {
         if (scene.type == "clip") {
             nextBeat();

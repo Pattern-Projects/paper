@@ -1,6 +1,11 @@
 TODO:
+  + Any clear up and commenting - DONE
+  + Collectible Gems
+  + Reaching goal transitions scenes
+  + Think about how to fit in index.html
   + Resolve:
     - keypress one behind
+    - Change html to xml?
 
 Paper!
 
