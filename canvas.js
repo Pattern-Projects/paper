@@ -31,7 +31,12 @@ var command = {};
 //Keypress Variables
 var fired = {};
 var restrained = { 39: true };
-var loop; //here for now
+var loop;
+
+
+// var objectsJSON = JSON.parse(objects);
+
+
 
 function initLoop() { //First calls of loadScene
   loadScene(sceneNum);

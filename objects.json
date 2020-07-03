@@ -1,1 +1,12 @@
-Objects
+{ "objects" : [
+  {
+    "name": "wheel",
+    "sprites": [
+      "wheel1.jpg",
+      "wheel2.jpg",
+      "wheel3.jpg",
+      "wheel4.jpg",
+    ]
+  }
+]
+}
